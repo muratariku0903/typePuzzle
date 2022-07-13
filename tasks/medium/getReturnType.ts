@@ -25,8 +25,6 @@ import { Expect, Equal } from '../../utils';
     const fn = (v: boolean) => v ? 1 : 2
     const fn1 = (v: boolean, w: any) => v ? 1 : 2
 
-    const tmp: MyReturnType<typeof fn1> = (n: number) => n * 2;
-
     type cases = [
         Expect<Equal<string, MyReturnType<() => string>>>,
         Expect<Equal<123, MyReturnType<() => 123>>>,
