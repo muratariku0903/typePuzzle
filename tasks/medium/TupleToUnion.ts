@@ -14,7 +14,4 @@ import { Expect, Equal } from '../../utils';
     // type TupleToUnion<T> = T extends (infer U)[] ? U : never;
     // type TupleToUnion<T extends any[]> = T[number];
     type TupleToUnion<T extends any[]> = T extends [infer first, ...infer rest] ? first | TupleToUnion<rest> : never;
-
-    const test: TupleToUnion<Arr> = 'a';
-
 }
