@@ -7,18 +7,13 @@ import type { Equal, Expect } from '../../utils'
 
     // type flatten = Flatten<[1, 2, [3, 4], [[[5]]]]> // [1, 2, 3, 4, 5]
 
-    type DeepUnpack<T extends any[] | any> = T extends (infer U)[] ? DeepUnpack<U> : T;
-
     type Flatten<T extends any[], R extends any[] = []> =
-        T extends []
-        ? []
-        :
-        T extends [infer F, infer Rest]
-        ? Flatten<[Rest], [...R, DeepUnpack<F>]>
-        : [...R, DeepUnpack<T>];
+        T extends [infer F, ...infer Rest]
+        ? F extends any[]
+        ? Flatten<[...F, ...Rest], R>
+        : Flatten<[...Rest], [...R, F]>
+        : R;
 
-    type tmp = Flatten<[1, 2, [3, 4], [[[5]]]]>;
-    type tmp1 = Flatten<[1, 2, 3, 4]>;
 
     type cases = [
         Expect<Equal<Flatten<[]>, []>>,
