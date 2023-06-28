@@ -14,7 +14,6 @@ import type { Equal, Expect } from '../../utils'
         : Flatten<[...Rest], [...R, F]>
         : R;
 
-
     type cases = [
         Expect<Equal<Flatten<[]>, []>>,
         Expect<Equal<Flatten<[1, 2, 3, 4]>, [1, 2, 3, 4]>>,
