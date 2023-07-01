@@ -3,29 +3,15 @@
 import { Expect, Equal } from '../../utils';
 
 {
-  // type isEmpty<T> = T extends [false] | [undefined] | [null] | [0] | [''] | [] | {} ? true : false;
+  type Empty = false | 0 | '' | null | undefined | [] | Record<string, never>
 
-  type Empty = false | undefined | null | 0 | '' | [] | {}
-
-  // 早期リターンができない
   type AnyOf<T extends any[], R = false> =
     T extends [infer F, ...infer Rest]
     ? F extends Empty ? AnyOf<Rest, R> : AnyOf<Rest, true>
     : T extends [Empty] | [] ? R : true;
 
-  type test1 = AnyOf<[0, '', false, []]>;
-  type test2 = AnyOf<[1]>;
-
-  type tmp = [1] extends [false | undefined | null | 0 | '' | [] | {}] ? true : false;
-
-  type aa = {}
-
-  const aa: aa = [1]
-
-  // type test = AnyOf<[1, 'test', true, [1], { name: 'test' }, { 1: 'test' }]>;
-
-  // type isEmptyArr<T extends any[]> = T extends [] ? true : false;
-  // type isEmptyArr = isEmpty<[1]>;
+  // type AnyOf<T extends any[]> = T[number] extends 0 | '' | false | [] | { [key: string]: never }
+  //   ? false : true;
 
   type cases = [
     Expect<Equal<AnyOf<[1, 'test', true, [1], { name: 'test' }, { 1: 'test' }]>, true>>,
