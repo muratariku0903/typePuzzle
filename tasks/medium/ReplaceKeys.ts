@@ -3,9 +3,11 @@
 import { Expect, Equal } from '../../utils';
 
 {
-  // 難しいことやろうとしてる？
-  // 順列みたいな処理の流れかな
-  type ReplaceKeys<O extends object, K extends string, R extends object> = O extends O ? { [key in keyof O]: key extends K ? key extends keyof R ? R[key] : never : O[key] } | ReplaceKeys<Exclude<O, O>, K, R> : never;
+  // type ReplaceKeys<O extends object, K extends string, R extends object> = O extends O ? { [key in keyof O]: key extends K ? key extends keyof R ? R[key] : never : O[key] } | ReplaceKeys<Exclude<O, O>, K, R> : never;
+
+  type ReplaceKeys<O extends object, K extends string, RO extends object> = {
+    [key in keyof O]: key extends K ? key extends keyof RO ? RO[key] : never : O[key];
+  };
 
   type NodeA = {
     type: 'A'
