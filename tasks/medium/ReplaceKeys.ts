@@ -61,6 +61,14 @@ import { Expect, Equal } from '../../utils';
   type ReplacedNodes = ReplacedNodeA | ReplacedNodeB | ReplacedNodeC
   type NodesNoName = NoNameNodeA | NoNameNodeC | NodeB
 
+  // type ReadOnlyNodes<O extends object> = { readonly [key in keyof O]: O[key] };
+
+  // type test = ReadOnlyNodes<Nodes>;
+
+  // const test: test = { type: 'A', name: 'murata', flag: 1 };
+
+  // test.name = 'tamura';
+
   type cases = [
     Expect<Equal<ReplaceKeys<Nodes, 'name' | 'flag', { name: number; flag: string }>, ReplacedNodes>>,
     Expect<Equal<ReplaceKeys<Nodes, 'name', { aa: number }>, NodesNoName>>,]
