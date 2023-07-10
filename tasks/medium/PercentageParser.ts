@@ -4,22 +4,24 @@
 import { Expect, Equal } from '../../utils'
 
 {
-  type PlusOrMinus = '+' | '-'
-  type Number = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
-  type Unit = '%'
+  // type PlusOrMinus = '+' | '-'
+  // type Number = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'
+  // type Unit = '%'
 
-  type PercentageParser<S extends string, P extends string = '', N extends string = '', U extends string = ''> =
-    S extends ''
-    ? [P, N, U]
-    : S extends `${infer F}${infer Rest}`
-    ? F extends PlusOrMinus
-    ? PercentageParser<Rest, F, N, U>
-    : F extends Number
-    ? PercentageParser<Rest, P, `${N}${F}`, U>
-    : F extends Unit
-    ? PercentageParser<Rest, P, N, F>
-    : never
-    : never
+  // type PercentageParser<S extends string, P extends string = '', N extends string = '', U extends string = ''> =
+  //   S extends `${infer F}${infer Rest}`
+  //   ? F extends PlusOrMinus
+  //   ? PercentageParser<Rest, F, N, U>
+  //   : F extends Number
+  //   ? PercentageParser<Rest, P, `${N}${F}`, U>
+  //   : F extends Unit
+  //   ? PercentageParser<Rest, P, N, F>
+  //   : never
+  //   : [P, N, U]
+
+  type CheckPrefix<T> = T extends '+' | '-' ? T : never;
+  type CheckSuffix<T> = T extends `${infer P}%` ? [P, '%'] : [T, ''];
+  type PercentageParser<A extends string> = A extends `${CheckPrefix<infer L>}${infer R}` ? [L, ...CheckSuffix<R>] : ['', ...CheckSuffix<A>];
 
   type Test = PercentageParser<'-100%'>
 
