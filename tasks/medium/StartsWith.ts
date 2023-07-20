@@ -3,7 +3,10 @@
 import { Equal, Expect } from "../../utils";
 
 {
-  type StartsWith<S extends string, T extends string> = any;
+  type StartsWith<
+    S extends string,
+    T extends string
+  > = S extends `${T}${infer R}` ? true : false;
 
   type cases = [
     Expect<Equal<StartsWith<"abc", "ac">, false>>,
