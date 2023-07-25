@@ -5,21 +5,29 @@
 import { Equal, Expect } from "../../utils";
 
 {
+  // type IntersectionObj<O extends object> = {
+  //   [key in keyof O]: Exclude<O[key], undefined>;
+  // };
+
+  // type RequiredByKeys<O extends object, K extends string | never = never> = [
+  //   K
+  // ] extends [never]
+  //   ? Required<O>
+  //   : IntersectionObj<
+  //       {
+  //         [key in keyof O as key extends K ? never : key]: O[key];
+  //       } & {
+  //         [key in Extract<keyof O, K>]-?: O[key];
+  //       }
+  //   >;
   type IntersectionObj<O extends object> = {
-    [key in keyof O]: Exclude<O[key], undefined>;
+    [K in keyof O]: O[K];
   };
 
-  type RequiredByKeys<O extends object, K extends string | never = never> = [
-    K
-  ] extends [never]
-    ? Required<O>
-    : IntersectionObj<
-        {
-          [key in keyof O as key extends K ? never : key]: O[key];
-        } & {
-          [key in Extract<keyof O, K>]-?: O[key];
-        }
-      >;
+  type RequiredByKeys<
+    O extends object,
+    K extends keyof O = keyof O
+  > = IntersectionObj<Required<Pick<O, K>> & Partial<Omit<O, K>>>;
 
   type test = RequiredByKeys<User, "name" | "age">;
 
