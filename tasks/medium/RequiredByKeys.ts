@@ -20,14 +20,19 @@ import { Equal, Expect } from "../../utils";
   //         [key in Extract<keyof O, K>]-?: O[key];
   //       }
   //   >;
-  type IntersectionObj<O extends object> = {
-    [K in keyof O]: O[K];
-  };
+  // type IntersectionObj<O extends object> = {
+  //   [K in keyof O]: O[K];
+  // };
 
-  type RequiredByKeys<
-    O extends object,
-    K extends keyof O = keyof O
-  > = IntersectionObj<Required<Pick<O, K>> & Partial<Omit<O, K>>>;
+  // type RequiredByKeys<
+  //   O extends object,
+  //   K extends keyof O = keyof O
+  // > = IntersectionObj<Required<Pick<O, K>> & Partial<Omit<O, K>>>;
+
+  type RequiredByKeys<O extends object, K extends keyof O = keyof O> = Omit<
+    Required<Pick<O, K>> & Partial<Omit<O, K>>,
+    never
+  >;
 
   type test = RequiredByKeys<User, "name" | "age">;
 
