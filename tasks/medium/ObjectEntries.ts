@@ -5,19 +5,21 @@ import { Expect, Equal } from "../../utils";
 {
   type ObjectEntries<O extends object, K = keyof O> = K extends keyof O
     ?
-        | [K, O[K] extends infer T | undefined ? T : O[K]]
+        | [K, [Required<O>[K]] extends [never] ? undefined : Required<O>[K]]
         | ObjectEntries<Omit<O, K>>
     : never;
-
-  type test = ObjectEntries<Partial<Model>>;
-
-  type partial = Partial<Model>;
 
   interface Model {
     name: string;
     age: number;
     locations: string[] | null;
   }
+
+  type ObjectToArr<O extends object> = { [K in keyof O]: [K, O[K]] }[keyof O];
+
+  // type arr = ObjectToArr<Model>;
+
+  // const arr: arr = ["helo", "helo"];
 
   type ModelEntries =
     | ["name", string]
