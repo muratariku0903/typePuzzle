@@ -7,18 +7,31 @@
 import { Expect, Equal } from "../../utils";
 
 {
-  type BEM<B, E extends any[], M extends any[]> = E extends [
-    infer EF,
-    ...infer ER
+  // type BEM<B extends string, E extends string[], M extends any[]> =
+  //   E extends [
+  //   infer EF,
+  //   ...infer ER
+  // ]
+  //   ? M extends [infer MF, ...infer MR]
+  //     ? BEM<B,>
+  //     : BEM<`${B}__${EF}`, ER, M>
+  //   : M extends [infer MF, ...infer MR]
+  //   ? BEM<`${B}--${}`, ER, M>
+  //   : B;
+
+  type unionStr = string;
+  const tmp: unionStr = "hello" || "good";
+
+  type BEM<B extends string, E extends any[], M extends any[]> = E extends [
+    infer F,
+    ...infer Rest
   ]
-    ? M extends [infer MF, ...infer MR]
-      ? null
-      : BEM<`${B}__${EF}`, ER, M>
-    : M extends [infer MF, ...infer MR]
-    ? BEM<`${B}--${}`, ER, M>
+    ? F extends string
+      ? BEM<`${B}__${F}`, Rest, E>
+      : never
     : B;
 
-  type test = BEM<"btn", ["price"], []>;
+  type test1 = BEM<"btn", ["price"], []>;
 
   type cases = [
     Expect<Equal<BEM<"btn", ["price"], []>, "btn__price">>,
