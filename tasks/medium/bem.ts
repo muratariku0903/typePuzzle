@@ -7,31 +7,40 @@
 import { Expect, Equal } from "../../utils";
 
 {
-  // type BEM<B extends string, E extends string[], M extends any[]> =
-  //   E extends [
-  //   infer EF,
-  //   ...infer ER
-  // ]
-  //   ? M extends [infer MF, ...infer MR]
-  //     ? BEM<B,>
-  //     : BEM<`${B}__${EF}`, ER, M>
-  //   : M extends [infer MF, ...infer MR]
-  //   ? BEM<`${B}--${}`, ER, M>
-  //   : B;
+  // イメージで言うと二重ループを再帰関数で実装するってことだよね
+  // ある特定の文字に対して文字列くっつける関数を作りたい
+  type Attach<
+    T extends string,
+    A extends any[],
+    Bond extends string
+  > = A extends [infer F, ...infer Rest]
+    ? `${T}${Bond}${F extends string ? F : ""}` | Attach<T, Rest, Bond>
+    : never;
 
-  type unionStr = string;
-  const tmp: unionStr = "hello" || "good";
+  type test1 = Attach<"target", ["apple", "banana", "peach"], "--">;
+
+  type CAttach<
+    E extends any[],
+    M extends any[],
+    Bond extends string
+  > = E extends [infer EF, ...infer ER]
+    ? `${EF extends string ? Attach<EF, M, Bond> : ""}` | CAttach<ER, M, "--">
+    : never;
+
+  type test2 = CAttach<["money", "love"], ["warning", "success"], "--">;
 
   type BEM<B extends string, E extends any[], M extends any[]> = E extends [
-    infer F,
-    ...infer Rest
+    infer EF,
+    ...infer ER
   ]
-    ? F extends string
-      ? BEM<`${B}__${F}`, Rest, E>
-      : never
-    : B;
+    ? M extends [infer MF, ...infer MR]
+      ? `${B}__${CAttach<E, M, "--">}`
+      : Attach<B, E, "__">
+    : Attach<B, M, "--">;
 
-  type test1 = BEM<"btn", ["price"], []>;
+  type test3 = BEM<"btn", ["price"], []>;
+  type test4 = BEM<"btn", ["price"], ["warning", "success"]>;
+  type test5 = BEM<"btn", [], ["small", "medium", "large"]>;
 
   type cases = [
     Expect<Equal<BEM<"btn", ["price"], []>, "btn__price">>,
