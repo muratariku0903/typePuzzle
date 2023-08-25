@@ -27,7 +27,14 @@ import { Expect, Equal } from "../../utils";
     ? `${EF extends string ? Attach<EF, M, Bond> : ""}` | CAttach<ER, M, "--">
     : never;
 
+  type CAttach2<
+    T extends string,
+    E extends string[],
+    M extends string[]
+  > = `${T}__${E[number]}__${M[number]}`;
+
   type test2 = CAttach<["money", "love"], ["warning", "success"], "--">;
+  type test20 = CAttach2<"target", ["money", "love"], ["warning", "success"]>;
 
   type BEM<B extends string, E extends any[], M extends any[]> = E extends [
     infer EF,
