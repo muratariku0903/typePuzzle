@@ -1,13 +1,15 @@
 import { Expect, Equal, NotEqual } from "../../utils";
 
 {
-  type Flip<O extends object, K = keyof O> = K extends keyof O
-    ? {
-        [key in O[K] & string]: K;
-      }
-    : never;
+  // type Flip<O extends object, K = keyof O> = K extends keyof O
+  //   ? {
+  //       [key in O[K] & string]: K;
+  //     }
+  //   : never;
 
-  type Flip2<O extends object, K = keyof O> = K extends keyof O ? K : never;
+  type Flip<O extends object> = {
+    [P in keyof O as `${O[P]}`]: P;
+  };
 
   type test1 = Flip<{ pi: "a" }>;
   type test2 = Flip<{ pi: "a" }>;
